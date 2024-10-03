@@ -44,19 +44,20 @@ const Attendance = () => {
           },
           body: JSON.stringify(values),
         });
-        const data = await res.json();
-        
+    
         if (!res.ok) {
-          throw new Error(data.error || "An error occurred");
+          const errorData = await res.json();  // Handle non-2xx responses
+          throw new Error(errorData.error || "An error occurred");
         }
-
+    
+        const data = await res.json();  // Handle the successful response
         showToast("success", "Attendance marked successfully!", "success");
         resetForm();
         localStorage.setItem("Attendance", JSON.stringify(data));
       } catch (error) {
         showToast("error", error.message, "error");
       }
-    },
+    }    
   });
 
   return (
