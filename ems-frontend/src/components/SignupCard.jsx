@@ -35,7 +35,7 @@ export default function SignupCard() {
   const setUser=useSetRecoilState(userAtom)
   const handleSignup = async () => {
     try {
-      const res = await fetch("/api/users/signup", {
+      const res = await fetch("https://cap-emsbackend.onrender.com/api/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
