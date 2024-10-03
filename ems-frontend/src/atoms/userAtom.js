@@ -1,8 +1,9 @@
 import { atom } from "recoil";
 
-const userAtom=atom({
-    key:'userAtom',
+// Fix the localStorage parsing to handle null or invalid data properly
+const userAtom = atom({
+  key: 'userAtom',
+  default: JSON.parse(localStorage.getItem('user-details')) || null,  // If no user, default to null
+});
 
-    default:JSON.parse(localStorage.getItem('user-details'))
-})
 export default userAtom;
