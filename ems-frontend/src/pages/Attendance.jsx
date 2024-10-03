@@ -37,7 +37,7 @@ const Attendance = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        const res = await fetch("https://cap-emsbackend.onrender.com/api/attendance", {
+        const res = await fetch("https://cap-emsbackend-1.onrender.com/api/attendance", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

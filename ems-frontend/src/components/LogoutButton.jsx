@@ -11,7 +11,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch('https://cap-emsbackend.onrender.com/api/users/logout', {
+      const res = await fetch('https://cap-emsbackend-1.onrender.com/api/users/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ export default function UpdateProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://cap-emsbackend.onrender.com/api/users/update/${user._id}`, {
+      const res = await fetch(`https://cap-emsbackend-1.onrender.com/api/users/update/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

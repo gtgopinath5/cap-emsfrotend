@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://cap-emsbackend.onrender.com", 
+        target: "https://cap-emsbackend-1.onrender.com", 
         changeOrigin: true,
         secure: false,
       }

@@ -38,7 +38,7 @@ const LeaveApplication = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        const res = await fetch("https://cap-emsbackend.onrender.com/api/leaveapplications", {
+        const res = await fetch("https://cap-emsbackend-1.onrender.com/api/leaveapplications", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
