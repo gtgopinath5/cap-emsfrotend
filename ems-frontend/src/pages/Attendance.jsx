@@ -40,8 +40,10 @@ const Attendance = () => {
         const res = await fetch("https://cap-emsbackend-1.onrender.com/api/attendance", {
           method: "POST",
           headers: {
+            
             "Content-Type": "application/json",
           },
+          credentials: "include", 
           body: JSON.stringify(values),
         });
     

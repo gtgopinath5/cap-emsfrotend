@@ -43,6 +43,7 @@ const LeaveApplication = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include", 
           body: JSON.stringify(values), // Send form data
         });
 
