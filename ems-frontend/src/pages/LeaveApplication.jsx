@@ -21,6 +21,9 @@ import useShowToast from "../hooks/useShowToast"; // Ensure this hook is availab
 const LeaveApplication = () => {
   const showToast = useShowToast(); // Custom hook for showing toast notifications
 
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem("user-details"); // Ensure "user-threads" is the correct key
+
   const formik = useFormik({
     initialValues: {
       leaveType: "",
@@ -38,9 +41,16 @@ const LeaveApplication = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
+        // Ensure token is present
+        if (!token) {
+          showToast("error", "Authentication token is missing.", "error");
+          return;
+        }
+
         const res = await fetch("https://cap-emsbackend-1.onrender.com/api/leaveapplications", {
           method: "POST",
           headers: {
+            'Authorization': `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include", 
@@ -54,7 +64,7 @@ const LeaveApplication = () => {
 
         showToast("success", "Leave application submitted successfully!", "success");
         resetForm();
-        localStorage.setItem("leave-application", JSON.stringify(data));
+        localStorage.setItem("leaveapplication",data.token)
       } catch (error) {
         showToast("error", error.message, "error");
       }
@@ -151,7 +161,7 @@ const LeaveApplication = () => {
             Submit Leave Application
           </Button>
           <p style={{ textAlign: "center" }}>
-            Back to Dashboard? <Link to="/">Dashboard</Link>
+            Back to Dashboard? <Link to="/" color="teal.500">Dashboard</Link>
           </p>
         </Stack>
       </form>

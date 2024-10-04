@@ -10,10 +10,14 @@ const LogoutButton = () => {
   const showToast = useShowToast();
 
   const handleLogout = async () => {
+    // Retrieve the token from local storage
+    const token = localStorage.getItem('user-details'); // Ensure this key is correct
+
     try {
       const res = await fetch('https://cap-emsbackend-1.onrender.com/api/users/logout', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -27,7 +31,7 @@ const LogoutButton = () => {
 
       // Clear user data from localStorage
       localStorage.removeItem('user-details');
-      localStorage.removeItem('leave-application');
+      localStorage.removeItem('leaveapplication');
       localStorage.removeItem('Attendance');
       localStorage.removeItem('user-profile');
       setUser(null); // Reset user state

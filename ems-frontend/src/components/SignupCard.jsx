@@ -13,7 +13,6 @@ import {
   Text,
   useColorModeValue,
   Link,
-  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
@@ -23,42 +22,45 @@ import useShowToast from '../hooks/useShowToast'
 import userAtom from '../atoms/userAtom'
 
 export default function SignupCard() {
-  const [showPassword, setShowPassword] = useState(false)
-  const setAuthScreen = useSetRecoilState(authScreenAtom)
+  const [showPassword, setShowPassword] = useState(false);
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [inputs, setInputs] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
-  })
-  const showToast=useShowToast()
-  const setUser=useSetRecoilState(userAtom)
+  });
+  const showToast = useShowToast();
+  const setUser = useSetRecoilState(userAtom);
+
   const handleSignup = async () => {
     try {
       const res = await fetch("https://cap-emsbackend-1.onrender.com/api/users/signup", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(inputs) // Pass inputs here
-      })
+        body: JSON.stringify(inputs), // Pass inputs here
+      });
 
-      const data = await res.json()
+      const data = await res.json();
       if (data.error) {
-        showToast("error",data.error,"error")
-        return
+        showToast("error", data.error, "error");
+        return;
       }
-      localStorage.setItem("user-threads",JSON.stringify(data));
-      setUser(data)
+      
+      // Save the token and user details upon successful signup
+      localStorage.setItem("user-details", data.token); // Store token in localStorage
+      setUser(data); // Set user data in Recoil state
+      showToast("success", "Signup successful", "success");
+
     } catch (error) {
-      showToast("error",data.error,"error")
+      showToast("error", error.message, "error");
     }
-  }
+  };
 
   return (
-    <Flex
-      align={'center'}
-      justify={'center'}>
+    <Flex align={'center'} justify={'center'}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
@@ -75,7 +77,8 @@ export default function SignupCard() {
               <Box>
                 <FormControl isRequired>
                   <FormLabel>Full Name</FormLabel>
-                  <Input type="text"
+                  <Input
+                    type="text"
                     onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
                     value={inputs.name}
                   />
@@ -84,7 +87,8 @@ export default function SignupCard() {
               <Box>
                 <FormControl isRequired>
                   <FormLabel>User Name</FormLabel>
-                  <Input type="text"
+                  <Input
+                    type="text"
                     onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
                     value={inputs.username}
                   />
@@ -92,8 +96,9 @@ export default function SignupCard() {
               </Box>
             </HStack>
             <FormControl isRequired>
-              <FormLabel>email</FormLabel>
-              <Input type="email"
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
                 onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
                 value={inputs.email}
               />
@@ -101,7 +106,8 @@ export default function SignupCard() {
             <FormControl isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'}
+                <Input
+                  type={showPassword ? 'text' : 'password'}
                   onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
                   value={inputs.password}
                 />
@@ -130,14 +136,12 @@ export default function SignupCard() {
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Already a user? <Link color={'blue.400'}
-                  onClick={() => setAuthScreen("login")}
-                >Login</Link>
+                Already a user? <Link color={'blue.400'} onClick={() => setAuthScreen("login")}>Login</Link>
               </Text>
             </Stack>
           </Stack>
         </Box>
       </Stack>
     </Flex>
-  )
+  );
 }

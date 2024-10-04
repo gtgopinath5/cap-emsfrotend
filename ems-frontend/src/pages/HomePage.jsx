@@ -20,9 +20,6 @@ const HomePage = ({ user }) => {
         <Heading className="dashboard__title" color="teal" mb={4} textAlign="center" fontSize={{ base: "2xl", md: "4xl" }}>
           Dashboard
         </Heading>
-        <Text className="dashboard__user-id" color="white" mb={6} textAlign="center" fontSize={{ base: "md", md: "lg" }}>
-          ID: {user?._id || "Guest"}
-        </Text>
         <nav className="dashboard__nav">
           <Stack spacing={4} align="center"> {/* Center alignment for buttons */}
             <Link to="/updateprofilepage">
@@ -34,7 +31,7 @@ const HomePage = ({ user }) => {
                 _hover={{ bg: "gray.600", transform: "scale(1.05)" }} // Hover effect
                 transition="0.3s"
               >
-                Profile
+                Profile Update
               </Button>
             </Link>
             <Link to="/leave-application">
@@ -61,7 +58,7 @@ const HomePage = ({ user }) => {
                 Mark Attendance
               </Button>
             </Link>
-            <Link to="/status-page">
+            <Link to="/records">
               <Button
                 colorScheme="gray"
                 color="teal"

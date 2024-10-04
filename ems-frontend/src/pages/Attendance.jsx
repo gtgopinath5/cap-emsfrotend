@@ -10,15 +10,19 @@ import {
   Heading,
   useColorModeValue,
   FormErrorMessage,
+  Divider,
   Text,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
-import useShowToast from "../hooks/useShowToast";
+import useShowToast from "../hooks/useShowToast"; // Ensure this hook is available
 
 const Attendance = () => {
-  const showToast = useShowToast();
+  const showToast = useShowToast(); // Custom hook for showing toast notifications
+
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem("user-details"); // Ensure "user-details" is the correct key
 
   const formik = useFormik({
     initialValues: {
@@ -37,46 +41,49 @@ const Attendance = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
+        // Ensure token is present
+        if (!token) {
+          showToast("error", "Authentication token is missing.", "error");
+          return;
+        }
+
         const res = await fetch("https://cap-emsbackend-1.onrender.com/api/attendance", {
           method: "POST",
           headers: {
-            
+            'Authorization': `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          credentials: "include", 
+          credentials: "include",
           body: JSON.stringify(values),
         });
-    
+
         if (!res.ok) {
           const errorData = await res.json();  // Handle non-2xx responses
           throw new Error(errorData.error || "An error occurred");
         }
-    
+
         const data = await res.json();  // Handle the successful response
         showToast("success", "Attendance marked successfully!", "success");
         resetForm();
-        localStorage.setItem("Attendance", JSON.stringify(data));
+        localStorage.setItem("Attendance", data.token);
       } catch (error) {
         showToast("error", error.message, "error");
       }
-    }    
+    }
   });
 
   return (
     <Box
-      maxW="md"
+      maxW="lg"
       mx="auto"
       bg={useColorModeValue("white", "gray.700")}
-      p={6}
-      rounded="lg"
+      p={8}
+      rounded="md"
       shadow="lg"
       mt={10}
-      borderWidth={1}
-      borderColor={useColorModeValue("gray.200", "gray.600")}
     >
-      <Heading mb={4} fontSize="2xl" textAlign="center">
-        Mark Attendance
-      </Heading>
+      <Heading mb={6} textAlign="center">Mark Attendance</Heading>
+      <Divider mb={6} />
       <form onSubmit={formik.handleSubmit}>
         <Stack spacing={4}>
           <FormControl
@@ -90,9 +97,8 @@ const Attendance = () => {
               value={formik.values.date}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              variant="outline"
-              focusBorderColor="blue.500"
-              isRequired
+              borderColor={useColorModeValue("gray.300", "gray.600")}
+              _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px teal.500" }}
             />
             <FormErrorMessage>{formik.errors.date}</FormErrorMessage>
           </FormControl>
@@ -109,9 +115,8 @@ const Attendance = () => {
               value={formik.values.status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              variant="outline"
-              focusBorderColor="blue.500"
-              isRequired
+              borderColor={useColorModeValue("gray.300", "gray.600")}
+              _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px teal.500" }}
             />
             <FormErrorMessage>{formik.errors.status}</FormErrorMessage>
           </FormControl>
@@ -128,20 +133,18 @@ const Attendance = () => {
               value={formik.values.shift}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              variant="outline"
-              focusBorderColor="blue.500"
-              isRequired
+              borderColor={useColorModeValue("gray.300", "gray.600")}
+              _focus={{ borderColor: "teal.500", boxShadow: "0 0 0 1px teal.500" }}
             />
             <FormErrorMessage>{formik.errors.shift}</FormErrorMessage>
           </FormControl>
 
-          <Button type="submit" colorScheme="blue" size="lg" mt={4}>
-            Submit
+          <Button type="submit" colorScheme="teal" width="full">
+            Submit Attendance
           </Button>
-
           <Text textAlign="center" mt={4}>
-            Get Back To Dashboard?{" "}
-            <ChakraLink as={Link} to="/" color="blue.500" fontWeight="bold">
+            Back to Dashboard?{" "}
+            <ChakraLink as={Link} to="/" color="teal.500" fontWeight="bold">
               Dashboard
             </ChakraLink>
           </Text>

@@ -40,10 +40,14 @@ export default function UpdateProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Retrieve the token from local storage
+    const token = localStorage.getItem("user-details"); // Ensure this key is correct
+
     try {
       const res = await fetch(`https://cap-emsbackend-1.onrender.com/api/users/update/${user._id}`, {
         method: "PUT",
         headers: {
+          'Authorization': `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...inputs }),
@@ -55,7 +59,7 @@ export default function UpdateProfilePage() {
       }
       showToast("success", "Profile updated successfully", "success");
       setUser(data);
-      localStorage.setItem("user-profile", JSON.stringify(data));
+      localStorage.setItem("user-profile", data.token); // Store updated token if necessary
     } catch (error) {
       showToast("error", error.message, "error");
     }
